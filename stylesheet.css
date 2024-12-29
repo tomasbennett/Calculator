@@ -1,0 +1,152 @@
+:root{
+    font-size: 62.5%;
+}
+
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body{
+    font-weight: 800;
+    font-size: 5rem;
+    font-family: "Courier New", monospace;
+
+    min-width: 100dvw;
+    min-height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: radial-gradient(circle at 75% 25%, #aa8d42 0%, #cf9e44 50%, #eea825);
+}
+
+#outer{
+    min-height: 75rem;
+    aspect-ratio: 1 / 1.3;
+
+    border: white solid .1rem;
+    border-radius: 4rem;
+
+    box-shadow: 4rem 4rem 8rem 2rem rgba(0, 0, 0, 1);
+    background: linear-gradient(135deg, rgb(124, 124, 124), rgb(87, 87, 87), rgb(70, 69, 69));
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr
+                        4fr;
+
+    row-gap: 3rem;
+    padding: 3rem 4rem;
+}
+
+.display-container{
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-rows: subgrid;
+
+    /* background: linear-gradient(to bottom, rgb(0, 36, 0), rgb(0, 112, 0, 1) 5%, rgb(0, 112, 0, 1) 95%, rgb(0, 36, 0)); */
+    background-color: rgb(83, 163, 83);
+    box-shadow: inset .5rem .5rem 1rem 0;
+    border: rgb(85, 65, 14) solid .1rem;
+    border-radius: 2rem;
+}
+
+.display-container.double-line{
+    grid-template-rows: 1fr 1fr;
+}
+
+.display{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.button-container{
+    grid-row: 2 / -1;
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-areas: 'divide clear clear delete'
+                         'multiply one two three'
+                         'minus four five six'
+                         'addition seven eight nine'
+                         'equals decimal naught naught';
+    column-gap: 2rem;
+    row-gap: 2rem;
+}
+
+.buttons{
+    border: rgba(150, 150, 150, 1) solid .2rem;
+    border-radius: .8rem;
+    box-shadow: .7rem .7rem 0 0 rgb(114, 130, 151);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+
+    cursor: pointer;
+}
+
+.numbers{
+    background-color: darkgrey;
+}
+
+.operators{
+    background-color: rgb(216, 140, 0);
+}
+
+.movements{
+    background-color: rgb(165, 165, 230);
+}
+
+.numbers:hover{
+    background-color: rgb(214, 214, 214);
+}
+
+.operators:hover{
+    background-color: rgb(245, 200, 116);
+}
+
+.movements:hover{
+    background-color: rgb(208, 208, 252);
+}
+
+.numbers:active{
+    margin-top: .7rem;
+    margin-left: .7rem;
+}
+
+.operators:active{
+    margin-top: .7rem;
+    margin-left: .7rem;
+}
+
+.movements:active{
+    margin-top: .7rem;
+    margin-left: .7rem;
+}
+
+
+
+
+
+
+
+#AC{
+    grid-area: clear;
+}
+
+#zero{
+    grid-area: naught;
+}
