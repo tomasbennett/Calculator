@@ -5,16 +5,19 @@ const displayContainer = document.querySelector('.display-container');
 const displayUpper = document.querySelector('.display.upper');
 const displayLower = document.querySelector('.display.lower');
 
-buttons.forEach(elem => {
-    elem.addEventListener('click', print)
-});
+
+buttons.forEach(elem => elem.addEventListener('click', print));
 
 function print(e){
     let displayText = (displayUpper.textContent + displayLower.textContent);
+    let lastDigit = [...displayText].pop() ?? '';
+    
     let input = e.target;
     let inputText = input.textContent;
+    
 
     let returnValue;
+    const oneLineCheck = () => returnValue.length >= 16 ? false : true;
 
     switch(true){
         case input.classList.contains('movements'):
@@ -30,16 +33,16 @@ function print(e){
             break;
 
         case input.id === "equals":
-            if(!!displayText.length){
+            if(lastDigitOperator(inputText, lastDigit)) return;
+            else if(!!displayText.length){
                 returnValue = evaluation(displayText);
                 
             } else {
                 returnValue = "0";
                 
             }
-            displayText += "=";
+            displayText += inputText;
             ansStructure(returnValue);
-            
             return;
             
         case input.classList.contains('numbers'):
@@ -47,7 +50,10 @@ function print(e){
             break;
 
         case input.classList.contains('operators'):
-            returnValue = operations(inputText);
+
+            returnValue = lastDigit || inputText === "-" ?
+                operations(inputText, displayText, lastDigit) :
+                displayText;
             break;
 
     }
@@ -56,45 +62,48 @@ function print(e){
     continuousStructure(returnValue);
     return;
 
-}
-
-const oneLineCheck = () => displayText.length >= 16 ? false : true;
-function ansStructure(answer){
-    if(oneLineCheck && answer.length <= 16){
-        displayContainer.classList.add('double-line');
-        displayUpper.textContent = displayText;
-        displayLower.textContent = answer;
-
-    } else {
-        cleared.click();
-        displayUpper.textContent = answer;
-
+    
+    function ansStructure(answer){
+        if(oneLineCheck() && answer.length <= 16){
+            displayContainer.classList.add('double-line');
+            displayUpper.textContent = displayText;
+            displayLower.textContent = answer;
+    
+        } else {
+            cleared.click();
+            displayUpper.textContent = answer;
+    
+        }
+    }
+    
+    function continuousStructure(input){
+        if(oneLineCheck()){
+            displayContainer.classList.remove('double-line');
+            displayUpper.textContent = input;
+    
+        } else {
+            displayContainer.classList.add('double-line');
+            displayUpper.textContent = input.slice(0, 16);
+            displayLower.textContent = input.slice(16);
+    
+        }
     }
 }
 
-function continuousStructure(input){
-    if(oneLineCheck){
-        displayContainer.classList.remove('double-line');
-        displayUpper.textContent = input;
-
-    } else {
-        displayContainer.classList.add('double-line');
-        displayUpper.textContent = input.slice(0, 16);
-        displayLower.textContent = input.slice(17);
-
-    }
-}
 
 const isOperator = (char) => /[-+*÷]/g.test(char);
-function operations(inputOperator){
-    
-    let lastDigit = [...displayText].pop();
-    if(["*","÷","+"].includes(inputOperator) && isOperator(lastDigit) || lastDigit === "."){
+const isPositiveOperator = (char) => /[+*÷]/g.test(char);
+const lastDigitOperator = (inputOperator, lastDigit) => {
+    if(["*","÷","+","="].includes(inputOperator) && isOperator(lastDigit) || lastDigit === "."){
         activateError();
-        return displayText;
+        return true;
     }
+    return false;
+}
+function operations(inputOperator, displayText, lastDigit){
+    
+    return lastDigitOperator(inputOperator, lastDigit) ? displayText : displayText + inputOperator;
 
-    return displayText + inputOperator;
 }
 
 
@@ -102,12 +111,13 @@ function evaluation(a){
     const operators = ["÷", "*", "+", "-"];
     for(let val of operators){
 
-        while(a.indexOf(val) !== -1){
+        while(a.lastIndexOf(val) !== -1){
             let index = a.indexOf(val);
+            if(!index) return a;
             let arr = stringTraversal(a, index);
             let ans = performFormula(parseFloat(arr[0]), parseFloat(arr[2]), arr[1]);
 
-            a = a.split(arr[0] + arr[1] + arr[2]).join(ans);
+            a = a.split(arr.join('')).join(ans);
         }
         
     }
@@ -136,9 +146,9 @@ function stringTraversal(str, index){
     }
 
     //Checking the right side of the string until we find an operator
-    if(isOperator(fullRightSide)){
+    if(isPositiveOperator(fullRightSide)){
         for(let i = index + 1; i < str.length; i++){
-            if(isOperator(str[i])) {
+            if(isPositiveOperator(str[i])) {
                 rightSide = str.slice(index + 1, i);
                 break;
             }
