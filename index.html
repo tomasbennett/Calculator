@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
     <link rel="stylesheet" href="stylesheet.css">
-    <script defer src="script.js"></script>
+    <script defer src="calculator.js"></script>
 </head>
 <body>
     <div id="outer">
 
-        <div class="display-container">
+        <div id="display-container">
 
-            
-            <div class="display upper"></div>
-            <div class="display lower"></div>
+            <div class="upper-formula">
+                <bdi></bdi>
+            </div>
+            <!-- <div class="display overflow-top-row">...</div> -->
+
+            <div class="display ans">Ans</div>
+            <div class="lower-formula">
+                <bdi></bdi>
+            </div>
+            <!-- <div class="display overflow-bottom-row">...</div> -->
 
         </div>
 

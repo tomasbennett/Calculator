@@ -5,8 +5,108 @@ const displayContainer = document.querySelector('.display-container');
 const displayUpper = document.querySelector('.display.upper');
 const displayLower = document.querySelector('.display.lower');
 
-
 buttons.forEach(elem => elem.addEventListener('click', print));
+
+const operators = ["÷", "*", "+", "-"];
+
+// function print2(e){
+//     let input = e.target;
+//     let inputText = input.textContent;
+    
+//     let firstNumberCase = convertClosure();
+    
+
+// }
+
+
+// function convertClosure(){
+//     let num = 0;
+//     let divisor = 1;
+//     let isDecimal = false;
+
+//     function convertToNum(str){
+//         if(isDecimal){
+//             divisor *= 10;
+//             num += +str / divisor;
+//         } else {
+//             num *= 10;
+//             num += +str;
+//         }
+//     }
+
+//     function convertToDecimal(){
+//         isDecimal = true;
+//     }
+
+//     function removeDecimal(){
+//         isDecimal = false;
+//     }
+
+//     function backSpace(){
+//         if(isDecimal){
+//             num *= divisor / 10;
+//             num = Math.floor(num);
+//             num /= divisor / 10;
+//         } else {
+//             num /= 10;
+//             num = Math.floor(num);
+//         }
+//     }
+
+//     function returnNumber(){
+//         return num;
+//     }
+
+//     function getDivisor(){
+//         return divisor;
+//     }
+    
+//     return{
+//         convertToNum,
+//         convertToDecimal,
+//         returnNumber,
+//         getDivisor,
+//         backSpace,
+//         removeDecimal
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function print(e){
     let displayText = (displayUpper.textContent + displayLower.textContent);
@@ -35,6 +135,9 @@ function print(e){
         case input.id === "equals":
             if(lastDigitOperator(inputText, lastDigit)) return;
             else if(!!displayText.length){
+                displayText = displayText.replace(/--/g, "+");
+                displayText = displayText.replace(/^\+/g, "");
+
                 returnValue = evaluation(displayText);
                 
             } else {
@@ -107,15 +210,18 @@ function operations(inputOperator, displayText, lastDigit){
 }
 
 
+//const operators = ["÷", "*", "+", "-"];
 function evaluation(a){
-    const operators = ["÷", "*", "+", "-"];
     for(let val of operators){
 
         while(a.lastIndexOf(val) !== -1){
             let index = a.indexOf(val);
             if(!index) return a;
             let arr = stringTraversal(a, index);
-            let ans = performFormula(parseFloat(arr[0]), parseFloat(arr[2]), arr[1]);
+
+
+            // let ans = performFormula(parseFloat(arr[0]), parseFloat(arr[2]), arr[1]);
+            let ans = performFormula(convertStrToNum(arr));
 
             a = a.split(arr.join('')).join(ans);
         }
@@ -124,6 +230,24 @@ function evaluation(a){
     return a;
 
 }
+
+function convertStrToNum(arr){
+    let num1;
+    let num2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function stringTraversal(str, index){
     let leftSide = '';
