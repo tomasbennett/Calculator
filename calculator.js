@@ -14,9 +14,41 @@ let run = convertClosure();
 displayUpper.textContent = run.reset();
 
 
+document.body.addEventListener("keydown", (e) => {
+    let str = '';
+
+    switch(e.key){
+        case "Enter":
+            str = "=";
+            break;
+
+        case "Backspace":
+            str = "⌫";
+            break;
+
+        case "Escape":
+            str = "AC";
+            break;
+
+        default:
+            str = e.key;
+    }
+
+    print(str);
+});
+
 function print(e){
-    let input = e.target;
-    let inputText = input.textContent;
+    let input;
+    let inputText;
+
+    if(typeof e == "string"){
+        inputText = e;
+    }
+    else {
+        input = e.target;
+        inputText = input.textContent;
+    }
+
 
     if(inputText == "AC"){
         clear();
@@ -37,14 +69,22 @@ function print(e){
                 "Divide by zero ERROR" : 
                 eval;
 
+            scrollToLeft();
+
             buttons.forEach(elem => elem.removeEventListener('mousedown', print));
             buttons.forEach(elem => elem.addEventListener('mousedown', eventListenerCleanUp));
         }
     }
+
+    
     
 
 }
 
+function scrollToLeft(){
+    let ansDiv = displayLower.parentElement;
+    ansDiv.scrollLeft -= ansDiv.scrollWidth;
+}
 
 function eventListenerCleanUp(e){
     clear();
@@ -83,8 +123,11 @@ function preventionChecksComplete(inputText){
         case inputText == "0" && lastChar == "0" && (currentText == "0" || operators.slice(1).includes(currentText.slice(-2, -1))):
             return false;
 
-        default:
+        case /[0-9\-]/g.test(inputText) || operators.includes(inputText):
             return true;
+
+        default:
+            return false;
     }
 }
 
@@ -131,7 +174,7 @@ function convertClosure(){
             newOperators();
         } 
         else if (inputText === '.'){
-            convertToDecimal();
+            inputText = convertToDecimal();
         } 
         else if(!isNaN(inputText)){
             convertToNum();
@@ -260,7 +303,10 @@ function convertClosure(){
     }
 
     function convertToDecimal() {
+        if(isDecimal) return '';
+
         isDecimal = true;
+        return '.';
     }
 
     function convertToNegative(){
@@ -322,9 +368,9 @@ function convertClosure(){
         return evaluate();
     }
 
-    function getDivisor(){
-        return divisor;
-    }
+    // function getDivisor(){
+    //     return divisor;
+    // }
 
     
     return{
